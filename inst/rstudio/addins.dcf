@@ -1,0 +1,4 @@
+Name: Start Tutorial
+Description: installs swirl course "Landscape_Genetic_Data_Analysis_with_R" and starts swirl
+Binding: startTutorialAddin
+Interactive: true
