@@ -18,6 +18,7 @@ Imports:
     proto,
     readr,
     RgoogleMaps,
+    rmarkdown,
     rstudioapi (>= 0.5),
     sampling,
     seqinr,
