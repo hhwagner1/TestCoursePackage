@@ -1,6 +1,6 @@
 \name{chooseWEAddin}
 \alias{chooseWEAddin}
-\title{Choose Worked Example File}
+\title{Choose Worked Example}
 \usage{
 chooseWEAddin()
 }

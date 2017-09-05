@@ -4,7 +4,7 @@ startTutorialAddin <- function() {
 #                           "Landscape_Genetic_Data_Analysis_with_R.swc",
 #                           package = "TestCoursePackage")')
   path <- system.file('swirl/Landscape_Genetic_Data_Analysis_with_R.swc', package='TestCoursePackage')
-  swirl::install_course_directory(path)
+#  swirl::install_course_directory(path)
 
   cat("To start a tutorial:","\n",
       "- type: require(swirl)", "\n",
