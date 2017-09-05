@@ -11,13 +11,21 @@ LazyData: true
 Imports:
     adegenet (>= 2.1.0),
     base64enc,
+    geosphere,
+    igraph,
     miniUI (>= 0.1.1),
-    popgraph,
-    gstudio,
+    proto,
     readr,
+    RgoogleMaps,
     rstudioapi (>= 0.5),
+    sampling,
+    seqinr,
     shiny (>= 0.13),
-    swirl (>= 2.4.3)
+    spacetime,
+    spdep,
+    swirl (>= 2.4.3),
+    popgraph,
+    gstudio
 Remotes:
     dyerlab/popgraph,
     dyerlab/gstudio
