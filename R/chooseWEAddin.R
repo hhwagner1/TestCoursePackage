@@ -22,7 +22,7 @@ chooseWEAddin <- function() {
   server <- function(input, output, session) {
 
     # Listen for 'done' events.
-    observeEvent(input$done, {
+    shiny::observeEvent(input$done, {
 
       selectedFile <- paste0(c("WorkedExample_Week1",
                                "WorkedExample_Week2_short",
@@ -30,12 +30,12 @@ chooseWEAddin <- function() {
                              c(".nb.html", ".Rmd", ".pdf")
                              [as.numeric(input$type)])
 
-      browseURL(paste0('file://',
+      utils::browseURL(paste0('file://',
                        system.file("WE", selectedFile,
                                    package = "TestCoursePackage")))
 
       cat(paste("Opening",selectedFile))
-      stopApp()
+      shiny::stopApp()
     })
 
   }

@@ -3,7 +3,12 @@ startTutorialAddin <- function() {
 #  install_course_directory('system.file("extdata",
 #                           "Landscape_Genetic_Data_Analysis_with_R.swc",
 #                           package = "TestCoursePackage")')
-  path <- system.file('swirl/Landscape_Genetic_Data_Analysis_with_R.swc', package='TestCoursePackage')
+  # path <- system.file('swirl/Landscape_Genetic_Data_Analysis_with_R.swc',
+  #                     package='TestCoursePackage')
+
+  path <- system.file("swirl", "Landscape_Genetic_Data_Analysis_with_R.swc",
+              package = "TestCoursePackage")
+
   swirl::install_course_directory(path)
 
   cat("To start a tutorial:","\n",
@@ -12,10 +17,14 @@ startTutorialAddin <- function() {
       "- follow prompts", "\n",
       "- select course and tutorial","\n\n")
 
-#  cat("- to exit, type: bye()","\n",
-#      "- to resume, type: swirl()","\n",
-#      "- to restart tutorial, use a different name", "\n",
-#      "  (best add a number, like this: 'MyName2')")
+  cat("To stop and resume a tutorial:","\n",
+      "- to stop and exit swirl, type: bye()","\n",
+      "- to resume where you stopped, type: swirl()","\n\n")
+
+  cat("To restart tutorial from beginning:","\n",
+      "- type: swirl()","\n",
+      "- use a different name", "\n",
+      "  (simply add a number, like this: 'MyName2')")
 }
 
 
