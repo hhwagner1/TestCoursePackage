@@ -8,3 +8,8 @@ Description: opens file with a worked example from course "Landscape Genetic Dat
 Binding: chooseWEAddin
 Interactive: true
 
+Name: Watch Course Video
+Description: opens a video resource from the course "Landscape Genetic Data Analysis with R" in web browser
+Binding: watchVideoAddin
+Interactive: true
+

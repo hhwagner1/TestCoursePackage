@@ -1,0 +1,10 @@
+\name{watchVideoAddin}
+\alias{watchVideoAddin}
+\title{Watch a Course Video}
+\usage{
+watchVideoAddin()
+}
+\description{
+This addin let's the user select a course video and open it from the web.
+}
+
