@@ -1,12 +1,12 @@
-\name{hello}
-\alias{hello}
-\title{Hello, World!}
+\name{startTutorialAddin}
+\alias{startTutorialAddin}
+\title{Start Tutorial}
 \usage{
-hello()
+startTutorialAddin()
 }
 \description{
-Prints 'Hello, world!'.
+Loads swirl course "Landscape_Genetic_Data_Analysis_with_R" and prints instructions how to access it.
 }
 \examples{
-hello()
+startTutorialAddin()
 }
