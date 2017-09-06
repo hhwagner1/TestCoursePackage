@@ -1,14 +1,4 @@
 startTutorialAddin <- function() {
-#  swirl::install_course_directory("Landscape_Genetic_Data_Analysis_with_R.swc")
-#  install_course_directory('system.file("extdata",
-#                           "Landscape_Genetic_Data_Analysis_with_R.swc",
-#                           package = "TestCoursePackage")')
-  # path <- system.file('swirl/Landscape_Genetic_Data_Analysis_with_R.swc',
-  #                     package='TestCoursePackage')
-
-  #path <- system.file("swirl", "Landscape_Genetic_Data_Analysis_with_R.swc",
-  #            package = "TestCoursePackage")
-  #swirl::install_course_directory(path)
 
   swirl::install_course_github("hhwagner1", "Landscape_Genetics_R_Course")
 
