@@ -1,17 +1,20 @@
+Name: 1. Watch Course Video
+Description: opens a video resource from the course "Landscape Genetic Data Analysis with R" in web browser
+Binding: watchVideoAddin
+Interactive: true
+
+Name: 2. Start Tutorial
+Description: installs swirl course "Landscape_Genetics_R_Course" and print instructions
+Binding: startTutorialAddin
+Interactive: true
+
 Name: 3. Choose Worked Example
 Description: opens file with a worked example from course "Landscape Genetic Data Analysis with R"
 Binding: chooseWEAddin
 Interactive: true
 
-Name: 2. Start Tutorial
-Description: installs swirl course "Landscape_Genetic_Data_Analysis_with_R" and starts swirl
-Binding: startTutorialAddin
-Interactive: true
 
-Name: 1. Watch Course Video
-Description: opens a video resource from the course "Landscape Genetic Data Analysis with R" in web browser
-Binding: watchVideoAddin
-Interactive: true
+
 
 
 
