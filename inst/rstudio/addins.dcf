@@ -1,5 +1,5 @@
 Name: 1. Watch Course Video
-Description: opens a video resource from the course "Landscape Genetic Data Analysis with R" in web browser
+Description: opens a video resource from course "Landscape Genetic Data Analysis with R" in web browser
 Binding: watchVideoAddin
 Interactive: true
 
