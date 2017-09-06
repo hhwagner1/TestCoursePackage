@@ -4,7 +4,11 @@ Binding: watchVideoAddin
 Interactive: true
 
 Name: 2. Start Tutorial
+<<<<<<< HEAD
 Description: installs swirl course "Landscape_Genetics_R_Course" and print instructions
+=======
+Description: installs swirl course "Landscape_Genetics_R_Course" and starts swirl
+>>>>>>> 6483fd5372cf9494426c5ec1bcb68371a545f707
 Binding: startTutorialAddin
 Interactive: true
 
