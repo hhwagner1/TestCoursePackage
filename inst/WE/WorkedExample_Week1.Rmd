@@ -1,9 +1,9 @@
 ---
 title: "Week 1: Importing Genetic Data"
 output:
+  html_notebook: default
   pdf_document: default
   html_document: default
-  html_notebook: default
 ---
 ## 1. Overview of Worked Example
 
@@ -54,8 +54,10 @@ Here is a screenshot of the first few lines of the file with the genetic data, f
 
 Note: in Excel, the columns with the loci must be defined as 'text', otherwise Excel is likely to interpret them as times!
 
-####![Screenshot of Excel file with genetic data](ExcelTable.png){ width=70% }
-
+```{r  out.width = "60%"}
+knitr::include_graphics(system.file("extdata", "ExcelTable.png", 
+                            package = "TestCoursePackage"))
+```
 
 ### b) Import with function 'read.csv'
 
