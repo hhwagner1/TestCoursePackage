@@ -1,6 +1,11 @@
 startTutorialAddin <- function() {
-  update_tutorial("Landscape_Genetics_R_Course")
-  swirl::install_course_github("hhwagner1", "Landscape_Genetics_R_Course")
+
+  course_name <- "Landscape_Genetics_R_Course"
+  path <- file.path(swirl:::swirl_courses_dir(),
+                    swirl:::make_pathname(course_name))
+  if (file.exists(path)) unlink(path, recursive = TRUE, force = TRUE)
+
+  swirl::install_course_github("hhwagner1", course_name)
 
   cat("\n","To start a tutorial:","\n",
       "- type: require(swirl)", "\n",
