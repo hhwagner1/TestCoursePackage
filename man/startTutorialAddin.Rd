@@ -1,6 +1,6 @@
 \name{startTutorialAddin}
 \alias{startTutorialAddin}
-\title{Start Interactive Tutorial}
+\title{Start Tutorial}
 \usage{
 startTutorialAddin()
 }
