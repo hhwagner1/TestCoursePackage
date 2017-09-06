@@ -11,6 +11,7 @@ LazyData: true
 Imports:
     adegenet (>= 2.1.0),
     base64enc,
+    formatR (>= 1.5),
     GeNetIt,
     geosphere,
     httpuv,
