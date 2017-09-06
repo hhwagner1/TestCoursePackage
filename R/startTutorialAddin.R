@@ -1,5 +1,5 @@
 startTutorialAddin <- function() {
-
+  swirl::uninstall_all_courses(force = FALSE)
   swirl::install_course_github("hhwagner1", "Landscape_Genetics_R_Course")
 
   cat("\n","To start a tutorial:","\n",
