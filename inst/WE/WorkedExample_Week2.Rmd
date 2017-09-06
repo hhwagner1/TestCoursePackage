@@ -45,7 +45,6 @@ require(raster)
 require(GeNetIt)
 require(tmaptools) 
 require(SDMTools) # for landscape metrics
-root <- rprojroot::find_root("DGS_Week1_Lab.Rproj")
 ```
 
 ### d) List of tasks
@@ -60,7 +59,8 @@ root <- rprojroot::find_root("DGS_Week1_Lab.Rproj")
 ### a) Import data into 'SpatialPointsDataFrame'
 
 ```{r}
-RALU.site <- read.csv(file.path(root, "Data", "RALU_site_all.csv"), header=TRUE)
+RALU.site <- read.csv(system.file("extdata", "RALU_site_all.csv", 
+                            package = "TestCoursePackage"), header=TRUE)
 head(RALU.site)
 ```
 

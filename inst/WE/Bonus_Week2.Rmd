@@ -29,7 +29,6 @@ require(raster)
 require(GeNetIt)
 require(rasterVis)
 require(tmaptools) 
-root <- rprojroot::find_root("DGS_Week1_Lab.Rproj")
 ```
 
 ## 2. Convert 'SpatialPointsDataFrame' to 'sf' object 
@@ -41,7 +40,8 @@ Note: the exclamation mark '!' means 'is not', hence 'if(!exists("RALU.site.sp")
 ```{r}
 if(!exists("RALU.site.sp"))
 {
-  RALU.site <- read.csv(file.path(root, "Data", "RALU_site_all.csv"), header=TRUE)
+  RALU.site <- read.csv(system.file("extdata", "RALU_site_all.csv", 
+                            package = "TestCoursePackage"), header=TRUE)
   RALU.site.sp <- RALU.site
   coordinates(RALU.site.sp) <- ~coords.x1+coords.x2
   proj4string(RALU.site.sp) <- get_proj4("utm11")
@@ -86,8 +86,7 @@ Just in case you want to know how you could get your results into a GIS. This is
 The argument 'delete_dsn' specifies whether any existing file with the same name should be deleted first (i.e., overwritten). 
 
 ```{r}
-st_write(RALU.site.sf, file.path(root, "Output", "RALU.site.shp"), 
-                                 delete_dsn = TRUE)
+st_write(RALU.site.sf, "RALU.site.shp", delete_dsn = TRUE)
 ```
 
 ## 5. Display categorical map with a predefined color table
@@ -116,7 +115,8 @@ Let's add some columns with labels and predefined colors (using hex color code).
 It has more rows than we need, because not all US land cover classes occur in the study area. We need to make sure the colors and cover types are stored as 'character', because the missing factor levels would later create problems.
 
 ```{r}
-ColTab <- read.csv(file.path(root, "Data", "Colortable_LULC.csv"), header=TRUE)
+ColTab <- read.csv(system.file("extdata", "Colortable_LULC.csv", 
+                            package = "TestCoursePackage"), header=TRUE)
 ColTab$color <- as.character(ColTab$color)
 ColTab$attribute <- as.character(ColTab$attribute)
 ColTab

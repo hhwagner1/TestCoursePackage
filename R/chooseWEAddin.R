@@ -25,7 +25,7 @@ chooseWEAddin <- function() {
     shiny::observeEvent(input$done, {
 
       selectedFile <- paste0(c("WorkedExample_Week1",
-                               "WorkedExample_Week2_short",
+                               "WorkedExample_Week2",
                                "Bonus_Week2")[as.numeric(input$example)],
                              c(".nb.html", ".Rmd", ".pdf")
                              [as.numeric(input$type)])

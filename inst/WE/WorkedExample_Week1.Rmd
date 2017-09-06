@@ -1,9 +1,9 @@
 ---
 title: "Week 1: Importing Genetic Data"
 output:
+  pdf_document: default
   html_document: default
   html_notebook: default
-  pdf_document: default
 ---
 ## 1. Overview of Worked Example
 
@@ -33,12 +33,9 @@ This assumes the packages have been installed already. See separate instructions
 
 Note: the function 'library' will always load the package, even if it is already loaded, whereas 'require' will only load it if it is not yet loaded. Either will work.
 
-Here we also define 'root' as the path to the project folder, to help with accessing files from different folders within the R project. 
-
 ```{r message=FALSE, warning=TRUE}
 require(adegenet)
 require(gstudio)
-root <- rprojroot::find_root("DGS_Week1_Lab.Rproj")
 ```
 
 ### d) List of tasks
@@ -62,10 +59,11 @@ Note: in Excel, the columns with the loci must be defined as 'text', otherwise E
 
 ### b) Import with function 'read.csv'
 
-As the file is saved in comma-separated file format (.csv), we use the function 'read.csv' to import it into an R object called 'RALU.data'. 
+As the file is saved in comma-separated file format (.csv), we use the function 'read.csv' to import it into an R object called 'RALU.data'. Here we use 'system.file' to access the raw data file that comes with the course R package.
 
 ```{r}
-tmp <- read.csv(file.path(root, "Data", "RALU_loci_12pops.csv"), header=TRUE)
+tmp <- read.csv(system.file("extdata", "RALU_loci_12pops.csv", 
+                            package = "TestCoursePackage"), header=TRUE)
 ```
 
 ### c) Check the dimensions and data type:
@@ -137,7 +135,6 @@ Printing the genind object's name lists the number of individuals, loci and alle
 
 ```{r}
 RALU.genind
-
 ```
 
 ### d) Summarize 'genind' object
@@ -185,7 +182,6 @@ List of allele names, separately for each locus. Note: the alleles are treated a
 
 ```{r}
 RALU.genind@all.names
-
 ```
 
 ### e) Further slots
@@ -223,7 +219,9 @@ Some explanations:
 - **header**: yes we have column names.
 
 ```{r}
-RALU.gstudio <- read_population(path=file.path(root, "Data", "RALU_loci_12pops.csv"), type="separated", locus.columns=c(2:9), phased=NULL, sep=",", header=TRUE)
+RALU.gstudio <- read_population(system.file("extdata", "RALU_loci_12pops.csv", 
+                package = "TestCoursePackage"), type="separated", 
+                locus.columns=c(2:9), phased=NULL, sep=",", header=TRUE)
 ```
 
 ### c) Check imported data
