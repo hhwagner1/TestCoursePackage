@@ -84,7 +84,7 @@ Before we can combine the sampling locations with other spatial datasets, such a
 
 For more information on CRS, see: https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/OverviewCoordinateReferenceSystems.pdf
 
-We know that these coordinates are UTM zone 11 (North) coordinates, hence we can use a helper function to find the correct 'proj4' string, using function 'get_proj4' from the 'tmaptools' package.
+We know that these coordinates are UTM zone 11 (Northern hemisphere) coordinates, hence we can use a helper function to find the correct 'proj4' string, using function 'get_proj4' from the 'tmaptools' package. (For the Southern hemisphere, you would add 's' after the zone: "utm11s").
 
 ```{r}
 proj4string(RALU.site.sp) <- get_proj4("utm11")
