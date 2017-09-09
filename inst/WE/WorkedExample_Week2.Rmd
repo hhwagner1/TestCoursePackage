@@ -265,25 +265,36 @@ Radius <- 500    # Define buffer radius
 Cellsize <- 30   # Indicate cell size in meters
 ```
 
-Then we create a loop through all sampling locations, calculating class-level metrics for each one within its buffer. I'm afraid that explaining this code in detail would be too much for today.
+Then we create a loop through all sampling locations, calculating class-level metrics for each one within its buffer (see video for further explanations).
 
 ```{r}
 RALU.site.class <- list()
 
 for(i in 1:length(RALU.site.sp))
 {
+  # For each raster cell, calculate distance from site centerpoint
   dist <- distanceFromPoints(NLCD, RALU.site.sp@coords[i,])
-  test <- dist
-  test[test < Cellsize] <- 1
-  test[test > 1] <- NA
-  test.buffer <- buffer(test, Radius)
-  test2 <- NLCD * test.buffer
-  #plot(test2) # Just checking: plot buffer
-  RALU.site.class[[i]] <- ClassStat(test2,cellsize=30)
+  
+  # Create raster where cell with centerpoint is 'TRUE' all others 'FALSE'
+  site <- (dist== min(values(dist)))
+  
+  # Replace 'FALSE' by 'NA' as required for function 'buffer'
+  site[site==FALSE] <- NA
+  
+  # Identify cells within buffer around site centerpoint:
+  # (this sets each cell within buffer to '1', all other cells to 'NA')
+  site.buffer <- buffer(site, Radius)
+  
+  # Extract land cover values within buffer (NLCD values within buffer
+  # are multiplied by 1, those outside by NA, thus setting them to 'NA')
+  NLCD.buffer <- NLCD * site.buffer
+  
+  # Calculate class-level metrics within buffer (i.e., for all non-NA cells)
+  RALU.site.class[[i]] <- ClassStat(NLCD.buffer,cellsize=30)
 }
 names(RALU.site.class) <- RALU.site.sp@data$SiteName
 
-# Make sure all sites list all cover types, even if they are absent from buffer:
+# Make sure all sites list all cover types, even if type is absent from buffer:
 class.ID <- levels(as.factor(NLCD))[[1]]
 RALU.site.class <- lapply(RALU.site.class, function(ls) merge(class.ID, ls, all=TRUE, by.x="ID", by.y="class"))
 ```
