@@ -5,7 +5,8 @@ watchVideoAddin <- function() {
     miniUI::miniContentPanel(
 
       shiny::selectInput("video", "Select a Video:",
-                   list("Week 1: Getting LG Data into R"=1),
+                   list("Week 1: Getting LG Data into R"=1,
+                        "Week 2: Land Cover Analysis in R"=2),
                   selected = 1
       )
     )
@@ -16,7 +17,8 @@ watchVideoAddin <- function() {
     # Listen for 'done' events.
     shiny::observeEvent(input$done, {
 
-      selectedVideo <- c("http://sho.co/199ZO")[as.numeric(input$video)]
+      selectedVideo <- c("http://sho.co/19BLE",
+                         "http://sho.co/19COP")[as.numeric(input$video)]
       utils::browseURL(selectedVideo)
 
       cat(paste0("Opening ",selectedVideo, " in web browser.", "\n\n",
