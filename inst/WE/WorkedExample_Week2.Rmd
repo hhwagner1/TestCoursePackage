@@ -1,9 +1,9 @@
 ---
 title: "Week 2: Spatial Data"
 output:
-  html_notebook: default
-  html_document: default
   pdf_document: default
+  html_document: default
+  html_notebook: default
 ---
 ## 1. Overview of Worked Example
 
@@ -17,16 +17,16 @@ This worked example shows:
 
 - How to import spatial coordinates and site attributes as spatially referenced data.  
 - How to plot raster data in R and overlay sampling locations.
-- How to calculate patch-level and land cover type - level landscape metrics.
+- How to calculate patch-level and class-level (cover type) landscape metrics.
 - How to extract landscape data at sampling locations and within a buffer around them.
 
 Try modifying the code to import your own data!
 
 ### b) Data set
 
-This code uses landscape data and spatial coordinates from 30 locations where Colombia spotted frogs (Rana luteiventris) were sampled for the full data set analyzed by Funk et al. (2005) and Murphy et al. (2010). Please see the separate introduction to the data set.
+This code uses landscape data and spatial coordinates from 30 locations where Colombia spotted frogs (*Rana luteiventris*) were sampled for the full data set analyzed by Funk et al. (2005) and Murphy et al. (2010). Please see the separate introduction to the data set.
 
-- RALU_sites_all.csv: File with spatial coordinates and site attributes (preformatted for import, 30 rows x 19 columns).
+- RALU_sites_all.csv: File with spatial coordinates and site attributes (preformatted for import, 31 rows x 19 columns).
 
 We will extract values at sampling point locations and within a local neighborhood (buffer) from six raster layers, which are included with the 'GeNetIt' package (see Murphy et al. 2010 for definitions):
 
@@ -58,6 +58,8 @@ require(SDMTools) # for landscape metrics
 
 ### a) Import data into 'SpatialPointsDataFrame'
 
+The .csv file with the data is part of the course R package. We can use the function 'system.file' to access it.
+
 ```{r}
 RALU.site <- read.csv(system.file("extdata", "RALU_site_all.csv", 
                             package = "TestCoursePackage"), header=TRUE)
@@ -68,7 +70,9 @@ The dataset has two columns with spatial coordinates and several attribute varia
 
 So far, R treats the spatial coordinates like any other quantitative variables. To let R know this is spatial information, we import it into a spatial object type, a 'SpatialPointsDataFrame' from the 'sp' package.
 
-The conversion is done with the function 'coordinates', which takes a data frame and converts it to a spatial object of the same name. The code is not very intuitive:
+The conversion is done with the function 'coordinates', which takes a data frame and converts it to a spatial object of the same name. The code is not very intuitive. 
+
+Note: the tilde symbol '~' (here before the first coordinate) is often used in R formulas, we will see it again later. It roughly translates to 'is modeled as a function of'.
 
 ```{r}
 RALU.site.sp <- RALU.site
@@ -84,14 +88,14 @@ Before we can combine the sampling locations with other spatial datasets, such a
 
 For more information on CRS, see: https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/OverviewCoordinateReferenceSystems.pdf
 
-We know that these coordinates are UTM zone 11 (Northern hemisphere) coordinates, hence we can use a helper function to find the correct 'proj4' string, using function 'get_proj4' from the 'tmaptools' package. (For the Southern hemisphere, you would add 's' after the zone: "utm11s").
+We know that these coordinates are UTM zone 11 (Northern hemisphere) coordinates, hence we can use a helper function to find the correct 'proj4' string, using function 'get_proj4' from the 'tmaptools' package. (For the Southern hemisphere, you would add 's' after the zone: "utm11s"). Here we call the function and the package simultaneously (this is good practice, as it helps keep track of where the functions in your code come from).
 
 ```{r}
-proj4string(RALU.site.sp) <- get_proj4("utm11")
+proj4string(RALU.site.sp) <- tmaptools::get_proj4("utm11")
 ```
 
 If we had longitude and latitude coordinates, we would modify the command like this: 
-proj4string(RALU.site.sp) <- get_proj4("longlat")
+proj4string(RALU.site.sp) <- tmaptools::get_proj4("longlat")
 
 ### c) Access data in 'SpatialPointsDataFrame'
 
@@ -162,11 +166,11 @@ layerStats(RALU.rasters.r, 'pearson', na.rm=T)
 
 ### b) Change color ramp, add sampling locations 
 
-We can specify a color ramp by setting the 'col' argument. The default is 'terrain.colors(255)'. Here we change it to 'rainbow(10)', a rainbow colorpalette with 10 color levels.
+We can specify a color ramp by setting the 'col' argument. The default is 'terrain.colors(255)'. Here we change it to 'rainbow(9)', a rainbow colorpalette with 9 color levels.
 
 Note: To learn about options for the 'plot' function for 'raster' objects, access the help file by typing '?plot' and select 'Plot a Raster* object'.
 
-And we can add the sampling locations (if we plot only a single raster layer). Here we use 'rev' to reverse the color ramp for plotting raster layer 'ffp', and add the sites as white circles with black outlines.
+We can add the sampling locations (if we plot only a single raster layer). Here we use 'rev' to reverse the color ramp for plotting raster layer 'ffp', and add the sites as white circles with black outlines.
 
 ```{r}
 plot(raster(RALU.rasters.r, layer="ffp"), col=rev(rainbow(9)))
@@ -175,7 +179,7 @@ points(RALU.site.sp, pch=21, col="black", bg="white")
 
 ### Extract raster values at sampling locations
 
-The following code adds six variables to the data slot of RALU.site.sp. Technically we combine the columns of the existing data frame 'RALU.site.sp' with the new columns in a new dat frame with the same name. 
+The following code adds six variables to the data slot of RALU.site.sp. Technically we combine the columns of the existing data frame 'RALU.site.sp' with the new columns in a new data frame with the same name. 
 
 R notices the difference in projection (CRS) between the sampling point data and the rasters and takes care of it, providing just a warning. 
 
@@ -211,7 +215,7 @@ For a list of all 37 metrics calculated, check the helpfile for 'ClassStat'. Bac
 
 Calculating patch-level metrics is a little more involved, as we have to decide which cover type (class) to analyze, and then delinate patches for that cover type. Then we calculate statistics for each patch.
 
-The first step is to reduce the land cover map 'nlcd' to a binary map showing forest vs. non-forest ('Everygreen Forest' is the only forest type mapped in the study area). We can do this by using a logical test: 'RALU.rasters.r==42', which tests for each cell in NLCD whether it is equal to 42. This results in a binary map, which we can plot, and overlay the sampling locations.
+The first step is to reduce the land cover map 'nlcd' to a binary map showing evergreen forest vs. any other cover type. We can do this by using a logical test: 'RALU.rasters.r==42', which tests for each cell in NLCD whether it is equal to 42. This results in a binary map, which we can plot, and overlay the sampling locations.
 
 ```{r}
 Forest <- (NLCD==42)
@@ -219,7 +223,7 @@ plot(Forest)
 points(RALU.site.sp, pch=21, bg="yellow", col="black")
 ```
 
-We use the function 'ConnCompLabel' to delineate patches (with the 8-neighbor rule, other rules are not implemented). This creates a new raster 'Patches' where the value in each cell is the new patch ID if forest, or zero if not. Then we run 'PatchStat' on the new raster.
+We use the function 'ConnCompLabel' to delineate patches (with the 8-neighbor rule, other rules are not implemented). This creates a new raster 'Patches' where the value in each cell is the new patch ID if evergreen forest, or zero if not. Then we run 'PatchStat' on the new raster.
 
 ```{r}
 Patches <- ConnCompLabel(Forest)
@@ -228,6 +232,8 @@ dim(NLCD.patch)
 ```
 
 This returns a list of 223 forest patches (rows) and 12 patch-level landscape metrics (columns). Let's look at the first few patches. Patches differ greatly in size! 
+
+Note: The first 'patch', with patchID = 0, contains all cells that are not evergreen forest!
 
 ```{r}
 head(NLCD.patch)
@@ -243,12 +249,12 @@ Let's add forest patch size to the RALU.site.sp data. First we need to get the p
 
 ```{r}
 a <- extract.data(RALU.site.sp@coords, Patches) # get patch IDs
-a[a==0] <- NA
+a[a==0] <- NA           # this is all the non-forested areas
 RALU.site.sp@data$ForestPatchSize <- NLCD.patch[a,"area"]
 RALU.site.sp@data$ForestPatchSize[is.na(a)] <- 0
 RALU.site.sp@data$ForestPatchSize
 ```
- Plot a bubble map of forest patch size at each sampling location:
+Plot a bubble map of forest patch size at each sampling location: 
  
 ```{r}
 bubble(RALU.site.sp, "ForestPatchSize", fill=FALSE, key.entries=as.numeric(names(table(RALU.site.sp@data$ForestPatchSize))))
@@ -273,13 +279,14 @@ RALU.site.class <- list()
 
 for(i in 1:nrow(RALU.site.sp@data))
 {
-  # For each raster cell, calculate distance from site centerpoint
+  # For each raster cell, calculate distance from sampling location
   dist <- distanceFromPoints(NLCD, RALU.site.sp@coords[i,])
   
-  # Create raster where cell with centerpoint is 'TRUE' all others 'FALSE'
+  # Create logical raster where the cell with the smallest distance from 
+  # the sampling location) is 'TRUE' all others 'FALSE'
   site <- (dist== min(values(dist)))
   
-  # Replace 'FALSE' by 'NA' as required for function 'buffer'
+  # Replace 'FALSE' by 'NA' as required for using function 'buffer'
   site[site==FALSE] <- NA
   
   # Identify cells within buffer around site centerpoint:
@@ -305,10 +312,11 @@ RALU.site.class[[2]]
 ```
 ### b) Extract landscape metric of choice for a single cover type (as vector)
 
-Now we can extract any variable of interest for any cover type of interest. Here we'll extract the percentage of (evergreen) forest within a 500 m radius around each site.
+Now we can extract any variable of interest for any cover type of interest. Here we'll extract the percentage of evergreen forest within a 500 m radius around each site. See tutorial for the use of lapply. 
 
 ```{r}
-# Extract variable 'prop.landscape' for cover type 42 (Evergreen Forest): 
+# Extract one variable, 'prop.landscape', for one cover type 42 (Evergreen Forest)
+# (this returns a vector with a single value for each site)
 PercentForest500 <- unlist(lapply(RALU.site.class, function(ls) ls[ls$ID==42, "prop.landscape"]))
 PercentForest500[is.na(PercentForest500)] <- 0
 PercentForest500
@@ -328,9 +336,23 @@ RALU.prop.landscape500 <- as.data.frame(tmp)
 head(RALU.prop.landscape500)
 ```
 
-### c) Append to site data set
+### d) Extract all landscape metrics for a single cover type (as data frame)
+
+To extract all landscape metrics for a single cover type, we need to modify the code like this. Here we add the class ID '42' to all variable names to indicate that these are quantified for cover type '42' (evergreen forest)
 
 ```{r}
-RALU.site.sp@data <- data.frame(RALU.site.sp@data, RALU.prop.landscape500) 
+tmp <- Reduce(rbind,lapply(RALU.site.class, function(ls) ls[ls$ID==42, ]))
+dimnames(tmp) <- list(row.names=names(RALU.site.class), 
+                      col.names=paste("42",names(tmp), sep="."))
+RALU.forest.500 <- as.data.frame(tmp)
+head(RALU.forest.500)
+```
+
+
+### e) Append to site data set
+
+```{r}
+RALU.site.sp@data <- data.frame(RALU.site.sp@data, RALU.prop.landscape500,
+                                RALU.forest.500) 
 ```
 Note: check this week's bonus material if you want to see how to use the new 'sf' library for spatial data, and how to export the site data to an shapefile that you can import into a GIS.
