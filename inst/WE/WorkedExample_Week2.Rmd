@@ -1,9 +1,9 @@
 ---
 title: "Week 2: Spatial Data"
 output:
-  pdf_document: default
-  html_document: default
   html_notebook: default
+  html_document: default
+  pdf_document: default
 ---
 ## 1. Overview of Worked Example
 
@@ -214,15 +214,16 @@ Calculating patch-level metrics is a little more involved, as we have to decide 
 The first step is to reduce the land cover map 'nlcd' to a binary map showing forest vs. non-forest ('Everygreen Forest' is the only forest type mapped in the study area). We can do this by using a logical test: 'RALU.rasters.r==42', which tests for each cell in NLCD whether it is equal to 42. This results in a binary map, which we can plot, and overlay the sampling locations.
 
 ```{r}
-plot(NLCD==42)
+Forest <- (NLCD==42)
+plot(Forest)
 points(RALU.site.sp, pch=21, bg="yellow", col="black")
 ```
 
-We use the function 'ConnCompLabel' to delineate patches (with the 8-neighbor rule, other rules are not implemented). This creates a new raster where the value in each cell is the new patch ID if forest (NLCD==42), or zero if not. Then we run 'PatchStat' on the new raster.
+We use the function 'ConnCompLabel' to delineate patches (with the 8-neighbor rule, other rules are not implemented). This creates a new raster 'Patches' where the value in each cell is the new patch ID if forest, or zero if not. Then we run 'PatchStat' on the new raster.
 
 ```{r}
-ccl.mat <- ConnCompLabel(NLCD==42)
-NLCD.patch <- PatchStat(ccl.mat,cellsize=30)
+Patches <- ConnCompLabel(Forest)
+NLCD.patch <- PatchStat(Patches,cellsize=30)
 dim(NLCD.patch)
 ```
 
@@ -241,7 +242,7 @@ For a list of the patch-level metrics calculated, check the helpfile.
 Let's add forest patch size to the RALU.site.sp data. First we need to get the patch ID at each sampling location, then its size.
 
 ```{r}
-a <- extract.data(RALU.site.sp@coords, ccl.mat) # get patch IDs
+a <- extract.data(RALU.site.sp@coords, Patches) # get patch IDs
 a[a==0] <- NA
 RALU.site.sp@data$ForestPatchSize <- NLCD.patch[a,"area"]
 RALU.site.sp@data$ForestPatchSize[is.na(a)] <- 0
@@ -265,12 +266,12 @@ Radius <- 500    # Define buffer radius
 Cellsize <- 30   # Indicate cell size in meters
 ```
 
-Then we create a loop through all sampling locations, calculating class-level metrics for each one within its buffer (see video for further explanations).
+Then we create a loop through all sampling locations (all rows of the site data set), calculating class-level metrics for each one within its buffer (see video for further explanations).
 
 ```{r}
 RALU.site.class <- list()
 
-for(i in 1:length(RALU.site.sp))
+for(i in 1:nrow(RALU.site.sp@data))
 {
   # For each raster cell, calculate distance from site centerpoint
   dist <- distanceFromPoints(NLCD, RALU.site.sp@coords[i,])
@@ -299,6 +300,9 @@ class.ID <- levels(as.factor(NLCD))[[1]]
 RALU.site.class <- lapply(RALU.site.class, function(ls) merge(class.ID, ls, all=TRUE, by.x="ID", by.y="class"))
 ```
 
+```{r}
+RALU.site.class[[2]]
+```
 ### b) Extract landscape metric of choice for a single cover type (as vector)
 
 Now we can extract any variable of interest for any cover type of interest. Here we'll extract the percentage of (evergreen) forest within a 500 m radius around each site.
