@@ -5,6 +5,6 @@
 watchVideoAddin()
 }
 \description{
-This addin let's the user select a course video and open it from the web.
+This addin let's the user select a course video and open it from the web as a video (mp4), slides (pdf), or both.
 }
 
