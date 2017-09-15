@@ -1,7 +1,7 @@
 openCheatsheetAddin <- function() {
 
   ui <- miniUI::miniPage(
-    miniUI::gadgetTitleBar("Watch a Course Video"),
+    miniUI::gadgetTitleBar("Open Cheat Sheet"),
     miniUI::miniContentPanel(
 
       shiny::selectInput("sheet", "Select a Cheat Sheet:",
