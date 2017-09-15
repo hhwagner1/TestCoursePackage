@@ -15,7 +15,7 @@ Interactive: true
 
 Name: 4. Open Cheat Sheet
 Description: opens selected R cheat sheet
-Binding: openCheatsheet
+Binding: openCheatsheetAddin
 Interactive: true
 
 
