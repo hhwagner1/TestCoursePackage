@@ -37,7 +37,7 @@ openCheatsheetAddin <- function() {
 
     utils::download.file(selectedFile,
                          destfile=file.path("downloads", basename(selectedFile)),
-                         method="auto")
+                         method="curl")
     utils::browseURL(file.path("downloads", basename(selectedFile)))
 
     cat(paste0("Hints:
