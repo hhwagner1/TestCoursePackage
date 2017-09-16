@@ -27,12 +27,14 @@ chooseWEAddin <- function() {
       selectedFile <- paste0(c("Week1_vignette",
                                "Week2_vignette",
                                "Week2_bonus_vignette")[as.numeric(input$example)],
-                             c(".html", ".Rmd", ".R")
-                             [as.numeric(input$type)])
+                             c(".html", ".Rmd", ".R")[as.numeric(input$type)])
+      selectedPath <- (paste0(system.file("doc", selectedFile,
+                       package = "TestCoursePackage")))
 
-      utils::browseURL(paste0('file://',
-                       system.file("doc", selectedFile,
-                                   package = "TestCoursePackage")))
+      switch(input$type,
+             "1" = utils::browseURL(paste0('file://', selectedPath)),
+             "2" = rstudioapi::navigateToFile(selectedPath),
+             "3" = rstudioapi::navigateToFile(selectedPath))
 
       cat(paste("Opening",selectedFile))
       shiny::stopApp()
@@ -40,7 +42,7 @@ chooseWEAddin <- function() {
 
   }
 
-  # We'll use a pane viwer, and set the minimum height at
+  # We'll use a pane viewer, and set the minimum height at
   # 300px to ensure we get enough screen space to display the clock.
   viewer <- shiny::dialogViewer("Choose Worked Example",
                                 width = 400, height = 600)
