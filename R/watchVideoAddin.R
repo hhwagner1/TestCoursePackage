@@ -38,7 +38,7 @@ watchVideoAddin <- function() {
       if(as.numeric(input$type) != 1)
       {
         utils::download.file(paste0("https://github.com/hhwagner1/DGS_LG_Labs/raw/master/docs/Video_slides/", selectedSlides),
-               destfile=file.path("downloads", selectedSlides), method="curl")
+               destfile=file.path("downloads", selectedSlides), mode="wb")
         utils::browseURL(file.path("downloads", selectedSlides))
       }
 
