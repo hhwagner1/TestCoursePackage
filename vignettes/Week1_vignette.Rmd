@@ -4,7 +4,7 @@ author: Helene Wagner
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Week 1: Importing Genetic Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -116,16 +116,16 @@ dim(Frogs)
 
 
 
-Display the first six rows to check whether the data have been imported correctly:
+Display the first few rows and columns to check whether the data have been imported correctly:
 
 ```{r}
-head(Frogs)
+as.tibble(Frogs)
 ```
 
+- The data frame 'Frogs' contains 181 rows and 11 columns. Only the first few are shown.
 - The file has a header row with column names.
-- Inside an R Notebook, this will automatically display the table as a 'tibble', where we can see under the column names that each column is a factor (<fctr>). Note: if running this code outside of an R Notebook, this information may not be displayed. You can check it by typing (without quotes): 'lapply(Frogs, class)'. Or, you can recreate the 'tibble' format by typing: 'head(as_tibble(Frogs))'.
 - Each row is one individual. Note that for this data set, there is no column with ID or names of individuals.
-- The first column indicates the population.
+- The first two columns indicates the site in long ("SiteName") and short ("Pop") format.
 - There are 8 columns with loci, named A - H. Each locus has two alleles, coded with numbers and separated by a colon (:). 
 - This coding suggests that the markers are codominant and that the species is diploid. 
 - The code for missing values is 'NA'. There seem to be quite a few missing values.
@@ -136,7 +136,7 @@ We'll add unique ID's for the frogs (to show how these would be imported). Here 
 
 ```{r}
 Frogs <- data.frame(FrogID = paste(substr(Frogs$Pop, 1, 3), row.names(Frogs), sep="."), Frogs)
-head(Frogs)
+as.tibble(Frogs)
 ```
 
 ## 3. Create 'genind' Object
@@ -193,10 +193,10 @@ The summary lists each attribute or 'slot' of the 'genind' object and summarizes
 
 ### a) Slot @tab
 
-Table with allele counts, where each column is an allele. Allele name "A.1" means "locus A, allele 1". For a codominant marker (e.g. microsatellite) and a diploid species, allele counts per individual can be 0, 1, 2, or NA=missing. Here are the first six lines:
+Table with allele counts, where each column is an allele. Allele name "A.1" means "locus A, allele 1". For a codominant marker (e.g. microsatellite) and a diploid species, allele counts per individual can be 0, 1, 2, or NA=missing. Here are the first few lines:
 
 ```{r}
-head(Frogs.genind@tab)
+as.tibble(Frogs.genind@tab)
 ```
 
 ### b) Slot @loc.n.all
@@ -267,14 +267,14 @@ Frogs.gstudio <- read_population("ralu.loci.csv", type="separated",
 Check the column types: 'SiteName' and 'Pop' are now character vectors, and the loci columns A - H are now of class 'locus' (it is indicated that 'locus' is a S3 object type).
 
 ```{r}
-head(Frogs.gstudio)
+as.tibble(Frogs.gstudio)
 ```
 
 ### d) Add FrogID as row names
 
-Frogs.gstudio is a data frame, and we can manipulate like any other data frame. Here we will use the 'FrogID' column we created in the object 'Frogs' to define row names.
+Frogs.gstudio is a data frame, and we can manipulate like any other data frame. Here we will add the variable 'FrogID' as the first column. 
 
 ```{r}
-row.names(Frogs.gstudio) <- Frogs$FrogID
-head(Frogs.gstudio)
+Frogs.gstudio <- data.frame(FrogID=Frogs$FrogID, Frogs.gstudio) 
+as.tibble(Frogs.gstudio)
 ```
