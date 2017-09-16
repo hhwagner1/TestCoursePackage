@@ -29,15 +29,24 @@ watchVideoAddin <- function() {
       selectedSlides <- c("Week1_Slides.pdf",
                           "Week2_Slides.pdf")[as.numeric(input$video)]
       if(as.numeric(input$type) != 2) utils::browseURL(selectedVideo)
-      if(as.numeric(input$type) != 1) utils::browseURL(paste0('file://',
-                    system.file("Slides", selectedSlides,
-                                 package = "TestCoursePackage")))
+      if(as.numeric(input$type) != 1) {
+        switch(input$video,
+               "1" = utils::download.file("https://github.com/hhwagner1/DGS_LG_Labs/raw/master/docs/Video_slides/Week1_Slides.pdf",
+                     destfile="Week1_Slides.pdf", method="libcurl"),
+               "2" = utils::download.file("https://github.com/hhwagner1/DGS_LG_Labs/raw/master/docs/Video_slides/Week2_Slides.pdf",
+                     destfile="Week2_Slides.pdf", method="libcurl"))
 
-      cat(paste0("Opening ",selectedVideo, " and slides in web browser.", "\n\n",
+        switch(input$video,
+               "1" = utils::browseURL("Week1_Slides.pdf"),
+               "2" = utils::browseURL("Week2_Slides.pdf"))
+      }
+
+      cat(paste0("Video location: ",selectedVideo, "\n\n",
       "Hints:
-      - Videos will open in your default web browser.
-      - Slides will open in your default app for PDF files.
-      - Make the video fullscreen by clicking on screen symbol on bottom right."))
+- Videos open in your default web browser.
+- Make video fullscreen by clicking on screen symbol (bottom right).
+- Slides open in your default PDF viewer.
+- Slides are saved to your active working directory."))
 
       shiny::stopApp()
     })
