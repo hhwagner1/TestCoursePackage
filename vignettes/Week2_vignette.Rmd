@@ -48,6 +48,7 @@ require(raster)
 require(GeNetIt)
 require(tmaptools) 
 require(SDMTools) # for landscape metrics
+require(tibble)
 getwd()           # check your working directory
 ```
 

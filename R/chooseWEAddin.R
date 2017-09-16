@@ -5,10 +5,10 @@ chooseWEAddin <- function() {
     miniUI::miniContentPanel(
 
       shiny::selectInput("type", "Choose a File Format:",
-                  list("R Notebook in web browser (.nb.html)"=1,
+                  list("HTML in web browser (html)"=1,
                        "R markdown in RStudio (.Rmd)"=2,
-                       "PDF file for printing (.pdf)"=3),
-                  selected = 2
+                       "Plain R code in RStudio(.R)"=3),
+                  selected = 1
       ),
       shiny::selectInput("example", "Choose a Worked Example:",
                    list("Week 1: Importing Genetic Data"=1,
@@ -24,14 +24,14 @@ chooseWEAddin <- function() {
     # Listen for 'done' events.
     shiny::observeEvent(input$done, {
 
-      selectedFile <- paste0(c("WorkedExample_Week1",
-                               "WorkedExample_Week2",
-                               "Bonus_Week2")[as.numeric(input$example)],
-                             c(".nb.html", ".Rmd", ".pdf")
+      selectedFile <- paste0(c("Week1_vignette",
+                               "Week2_vignette",
+                               "Week2_bonus_vignette")[as.numeric(input$example)],
+                             c(".html", ".Rmd", ".R")
                              [as.numeric(input$type)])
 
       utils::browseURL(paste0('file://',
-                       system.file("WE", selectedFile,
+                       system.file("doc", selectedFile,
                                    package = "TestCoursePackage")))
 
       cat(paste("Opening",selectedFile))

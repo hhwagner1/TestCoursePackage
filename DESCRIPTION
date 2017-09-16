@@ -33,12 +33,13 @@ Imports:
     sp,
     spdep,
     swirl (>= 2.4.3),
+    tibble,
     tmaptools,
     popgraph,
     gstudio
 Remotes:
     dyerlab/popgraph,
     dyerlab/gstudio
-Suggests: knitr, rmarkdown
+Suggests: knitr
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
