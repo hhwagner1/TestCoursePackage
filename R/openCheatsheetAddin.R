@@ -30,6 +30,11 @@ openCheatsheetAddin <- function() {
             "5" = "https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/data-transformation-cheatsheet.pdf",
             "6" = "https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/ggplot2-cheatsheet-2.1.pdf")
 
+    if(!dir.exists(file.path(getwd(), "downloads")))
+    {
+      dir.create(file.path(getwd(), "downloads"), FALSE)
+    }
+
     utils::download.file(selectedFile,
                          destfile=file.path("downloads", basename(selectedFile)),
                          method="libcurl")

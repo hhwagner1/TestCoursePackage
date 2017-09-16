@@ -29,6 +29,11 @@ watchVideoAddin <- function() {
       selectedSlides <- c("Week1_Slides.pdf",
                           "Week2_Slides.pdf")[as.numeric(input$video)]
 
+      if(!dir.exists(file.path(getwd(), "downloads")))
+      {
+        dir.create(file.path(getwd(), "downloads"), FALSE)
+      }
+
       if(as.numeric(input$type) != 2) utils::browseURL(selectedVideo)
       if(as.numeric(input$type) != 1)
       {
