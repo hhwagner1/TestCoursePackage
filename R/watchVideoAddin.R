@@ -28,17 +28,12 @@ watchVideoAddin <- function() {
 
       selectedSlides <- c("Week1_Slides.pdf",
                           "Week2_Slides.pdf")[as.numeric(input$video)]
-      if(as.numeric(input$type) != 2) utils::browseURL(selectedVideo)
-      if(as.numeric(input$type) != 1) {
-        switch(input$video,
-               "1" = utils::download.file("https://github.com/hhwagner1/DGS_LG_Labs/raw/master/docs/Video_slides/Week1_Slides.pdf",
-                     destfile="Week1_Slides.pdf", method="libcurl"),
-               "2" = utils::download.file("https://github.com/hhwagner1/DGS_LG_Labs/raw/master/docs/Video_slides/Week2_Slides.pdf",
-                     destfile="Week2_Slides.pdf", method="libcurl"))
 
-        switch(input$video,
-               "1" = utils::browseURL("Week1_Slides.pdf"),
-               "2" = utils::browseURL("Week2_Slides.pdf"))
+      if(as.numeric(input$type) != 2) utils::browseURL(selectedVideo)
+      if(as.numeric(input$type) != 1)
+      {
+        utils::download.file(paste0("https://github.com/hhwagner1/DGS_LG_Labs/raw/master/docs/Video_slides/", selectedSlides), destfile=file.path("downloads", selectedSlides))
+        utils::browseURL(file.path("downloads", selectedSlides))
       }
 
       cat(paste0("Video location: ",selectedVideo, "\n\n",
@@ -46,7 +41,7 @@ watchVideoAddin <- function() {
 - Videos open in your default web browser.
 - Make video fullscreen by clicking on screen symbol (bottom right).
 - Slides open in your default PDF viewer.
-- Slides are saved to your active working directory."))
+- Slides are saved to folder 'download' in your active working directory."))
 
       shiny::stopApp()
     })

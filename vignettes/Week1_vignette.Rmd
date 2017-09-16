@@ -70,7 +70,7 @@ write.csv(ralu.loci, "ralu.loci.csv", quote=FALSE, row.names=FALSE)
 
 ### b) Excel file 
 
-Check that the file "ralu.loci.csv" is in your lesson folder. Note that in Excel, the columns with the loci must be explicitly defined as 'text', otherwise Excel is likely to interpret them as times. Instructions: 
+Check that the file "ralu.loci.csv" is now in your active working directory. Note that in Excel, the columns with the loci must be explicitly defined as 'text', otherwise Excel is likely to interpret them as times. Instructions: 
 
 Opening an existing .csv file with genetic data:
 
