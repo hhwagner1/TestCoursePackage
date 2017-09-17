@@ -9,7 +9,7 @@ License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 Imports:
-    adegenet (>= 2.1.0),
+    ade4,
     base64enc,
     formatR (>= 1.5),
     GeNetIt,
@@ -35,9 +35,11 @@ Imports:
     swirl (>= 2.4.3),
     tibble,
     tmaptools,
+    adegenet (>= 2.1.0),
     popgraph,
     gstudio
 Remotes:
+    thibautjombart/adegenet,
     dyerlab/popgraph,
     dyerlab/gstudio
 Suggests: knitr
