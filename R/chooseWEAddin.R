@@ -5,10 +5,10 @@ chooseWEAddin <- function() {
     miniUI::miniContentPanel(
 
       shiny::selectInput("type", "Choose a File Format:",
-                  list("R Notebook in web browser (.nb.html)"=1,
+                  list("HTML in web browser (html)"=1,
                        "R markdown in RStudio (.Rmd)"=2,
-                       "PDF file for printing (.pdf)"=3),
-                  selected = 2
+                       "Plain R code in RStudio(.R)"=3),
+                  selected = 1
       ),
       shiny::selectInput("example", "Choose a Worked Example:",
                    list("Week 1: Importing Genetic Data"=1,
@@ -24,15 +24,17 @@ chooseWEAddin <- function() {
     # Listen for 'done' events.
     shiny::observeEvent(input$done, {
 
-      selectedFile <- paste0(c("WorkedExample_Week1",
-                               "WorkedExample_Week2",
-                               "Bonus_Week2")[as.numeric(input$example)],
-                             c(".nb.html", ".Rmd", ".pdf")
-                             [as.numeric(input$type)])
+      selectedFile <- paste0(c("Week1_vignette",
+                               "Week2_vignette",
+                               "Week2_bonus_vignette")[as.numeric(input$example)],
+                             c(".html", ".Rmd", ".R")[as.numeric(input$type)])
+      selectedPath <- (paste0(system.file("doc", selectedFile,
+                       package = "TestCoursePackage")))
 
-      utils::browseURL(paste0('file://',
-                       system.file("WE", selectedFile,
-                                   package = "TestCoursePackage")))
+      switch(input$type,
+             "1" = utils::browseURL(paste0('file://', selectedPath)),
+             "2" = rstudioapi::navigateToFile(selectedPath),
+             "3" = rstudioapi::navigateToFile(selectedPath))
 
       cat(paste("Opening",selectedFile))
       shiny::stopApp()
@@ -40,7 +42,7 @@ chooseWEAddin <- function() {
 
   }
 
-  # We'll use a pane viwer, and set the minimum height at
+  # We'll use a pane viewer, and set the minimum height at
   # 300px to ensure we get enough screen space to display the clock.
   viewer <- shiny::dialogViewer("Choose Worked Example",
                                 width = 400, height = 600)

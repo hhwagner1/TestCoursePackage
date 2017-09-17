@@ -21,20 +21,41 @@ openCheatsheetAddin <- function() {
     # Listen for 'done' events.
     shiny::observeEvent(input$done, {
 
-
-      selectedSheet <- c(paste0('file://',
-                                system.file("extdata", "RCommands.doc",
-                                            package = "TestCoursePackage")),
-          "https://github.com/rstudio/cheatsheets/blob/master/source/pdfs/base-r.pdf",
-          "https://github.com/rstudio/cheatsheets/blob/master/source/pdfs/rmarkdown-cheatsheet-2.0.pdf",
-          "https://github.com/rstudio/cheatsheets/blob/master/source/pdfs/data-import-cheatsheet.pdf",
-          "https://github.com/rstudio/cheatsheets/blob/master/source/pdfs/data-transformation-cheatsheet.pdf",
-          "https://github.com/rstudio/cheatsheets/blob/master/source/pdfs/ggplot2-cheatsheet-2.1.pdf")[as.numeric(input$sheet)]
-      utils::browseURL(selectedSheet)
+    if(input$sheet == "1")
+    {
+      utils::browseURL(paste0("file://", system.file("extdata", "RCommands.doc",
+                                                       package = "TestCoursePackage")))
+    }
 
 
-      cat(paste0("Opening ",selectedSheet, " in web browser.", "\n\n",
-      "Hint: download and save the file locally."))
+    if(input$sheet != "1")
+    {
+      if(!dir.exists(file.path(getwd(), "downloads")))
+      {
+        dir.create(file.path(getwd(), "downloads"), FALSE)
+      }
+
+      selectedFile <- switch(input$sheet,
+                             "1" = "",
+                             "2" = "https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/base-r.pdf",
+                             "3" = "https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/rmarkdown-cheatsheet-2.0.pdf",
+                             "4" = "https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/data-import-cheatsheet.pdf",
+                             "5" = "https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/data-transformation-cheatsheet.pdf",
+                             "6" = "https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/ggplot2-cheatsheet-2.1.pdf")
+
+      utils::download.file(selectedFile,
+                         destfile=file.path("downloads", basename(selectedFile)),
+                         mode="wb")
+      utils::browseURL(file.path("downloads", basename(selectedFile)))
+    }
+
+
+    cat(paste0("Hints:
+- 'List of R Functions by Tutorial' will open as Word file (doc).
+- Add your notes and save under a new name and/or destination!
+- All other cheat sheets will open in your default PDF viewer.
+- They are saved to folder 'downloads' in your active working directory."))
+
 
       shiny::stopApp()
     })
